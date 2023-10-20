@@ -1,4 +1,4 @@
-package com.uob.capstone3;
+package com.uob.capstone3.Controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
