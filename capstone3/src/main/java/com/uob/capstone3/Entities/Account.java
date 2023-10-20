@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -35,7 +37,8 @@ public class Account {
     @JoinColumn(name = "accountType_id", nullable = false)
     private AccountType accountType;
 
-    @Column(nullable = false) 
+    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE")
+    @Temporal(TemporalType.DATE) 
     private LocalDate accountCreatedDate;
 
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
