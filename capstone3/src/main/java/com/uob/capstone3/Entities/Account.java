@@ -35,7 +35,7 @@ public class Account {
     @JoinColumn(name = "accountType_id", nullable = false)
     private AccountType accountType;
 
-    @Column(nullable = false) 
+    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE") 
     private LocalDate accountCreatedDate;
 
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
