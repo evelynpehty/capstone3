@@ -10,6 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -38,7 +40,8 @@ public class AccountTransaction {
     @Column(nullable = false)
     private Double transactionAmount;
 
-    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE") 
+    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE")
+    @Temporal(TemporalType.DATE) 
     private LocalDate transactionDate;
 
     @ManyToOne 

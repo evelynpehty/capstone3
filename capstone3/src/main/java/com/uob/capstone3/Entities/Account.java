@@ -35,13 +35,13 @@ public class Account {
     @JoinColumn(name = "accountType_id", nullable = false)
     private AccountType accountType;
 
-    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE") 
+    @Column(nullable = false) 
     private LocalDate accountCreatedDate;
 
-    @Column(nullable = false, columnDefinition = "1") 
+    @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
     private int accountIsActive;
 
-    @Column(nullable = false, columnDefinition = "0.0") 
+    @Column(nullable = false, columnDefinition = "NUMERIC(10, 2) DEFAULT 0.00") 
     private Double accountBalance;
 
 }

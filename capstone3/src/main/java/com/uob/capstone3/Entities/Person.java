@@ -7,21 +7,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table (name = "User")
+@Table (name = "Person")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class User {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int userID;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String username;
     
     @Column(nullable = false) 
@@ -36,7 +38,8 @@ public class User {
     @Column(nullable = false) 
     private String role; //Admin or Teller
 
-    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE") 
+    @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE")
+    @Temporal(TemporalType.DATE) 
     private LocalDate creationDate;
 
 }
