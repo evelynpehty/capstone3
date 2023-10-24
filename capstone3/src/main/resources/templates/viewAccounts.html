@@ -37,7 +37,7 @@
                     <td th:text="${account.accountIsActive == 1 ? 'Yes' : 'No'}"></td>
                     <td th:text="${account.accountBalance}"></td>
                     <td>
-                        <a th:href="@{'/viewAccount/' + ${account.accountID}}" class="btn btn-primary btn-sm">View</a>
+                        <a th:href="@{'/accountdashboard/' + ${account.accountID}}" class="btn btn-primary btn-sm">View</a>
                         <a href="#"
                             th:class="${account.accountIsActive == 1} ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-success'"
                             data-bs-toggle="modal"

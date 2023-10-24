@@ -10,6 +10,5 @@ import com.uob.capstone3.Entities.AccountTransaction;
 
 @Repository
 public interface AccountTransactionRepository extends JpaRepository<AccountTransaction, Integer> {
-    List <AccountTransaction> findAllByTransactionPartyAccountID(Account transactionPartyAccountID);
-    List <AccountTransaction> findAllByAccountID(Account accountID);
+    List<AccountTransaction> findAllByAccountIDOrTransactionPartyAccountIDOrderByTransactionIDDesc(Account account, Account transactionParty);
 }

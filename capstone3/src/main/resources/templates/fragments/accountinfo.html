@@ -1,23 +1,26 @@
-<div class="container">
+<div class="container" th:object="${account}">
     <div class="row d-flex justify-content-between">
         <div class="col">
-            <p class="">Hello [User]</p>
-            <p class="">[Type] Account</p>
-            <p class="">Account ID: [ID]</p>
+            <p class="">Hello <span th:text="*{customerName}"></span> (<span th:text="*{customerNRIC}"></span>)</p>
+            <p class=""><span th:text="*{accountType.accountTypeName}"></span> Account</p>
+            <p class="">Account ID: <span th:text="*{accountID}"></span></p>
             <div class="row">
-                <p class="col">Account Status: [STATUS]</p>
-                <button type="button" class="btn btn-danger col btn-sm">Deactivate</button>
+                <p class="col">Account Status: <span th:text="*{accountIsActive} == 1 ? 'ACTIVE' : 'INACTIVE'"></span></p>
+                <div class="col" th:switch="*{accountIsActive}">
+                    <button type="button" class="btn btn-danger btn-sm" th:case="1">Deactivate</button>
+                    <button type="button" class="btn btn-success btn-sm" th:case="0">Activate</button>
+                </div>
             </div>
         </div>
         <div class="col"></div>
         <div class="col">
             <p>Balance:</p>
-            <p style="font-size: 3em;">[BALANCE]</p>
+            <p style="font-size: 3em;" th:text="*{accountBalance}"></p>
         </div>
     </div>
-    <div class="row m-5">
-            <a class="col mx-5" href="/transact/deposit"><button type="button" class="btn btn-danger">Deposit</button></a>
-            <a class="col mx-5" href="/transact/withdraw"><button type="button" class="btn btn-success">Withdraw</button></a>
-            <a class="col mx-5" href="/transact/transfer"><button type="button" class="btn btn-warning">Transfer</button></a>
+    <div class="row m-5" th:if="*{accountIsActive} == 1">
+            <a class="col mx-5" th:href="'/transact/deposit/' + *{accountID}"><button type="button" class="btn btn-danger">Deposit</button></a>
+            <a class="col mx-5" th:href="'/transact/withdraw/' + *{accountID}"><button type="button" class="btn btn-success">Withdraw</button></a>
+            <a class="col mx-5" th:href="'/transact/transfer/' + *{accountID}"><button type="button" class="btn btn-warning">Transfer</button></a>
     </div>
 </div>

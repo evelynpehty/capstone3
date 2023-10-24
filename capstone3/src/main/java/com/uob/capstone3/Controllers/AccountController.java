@@ -18,6 +18,7 @@ import com.uob.capstone3.Entities.AccountType;
 import com.uob.capstone3.Repositories.AccountRepository;
 import com.uob.capstone3.Repositories.AccountTransactionRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class AccountController {
@@ -110,18 +111,27 @@ public class AccountController {
         }
     }
 
-    @GetMapping(value="/accountdashboard")
-    public String showAccountDashboard(Model m) {
-        Account account = ar.findById(2).get();
-        List<AccountTransaction> transactionList = atr.findAllByTransactionPartyAccountID(account);
-        transactionList.addAll(atr.findAllByAccountID(account));
-        m.addAttribute("transactions", transactionList);
+    @GetMapping(value="/accountdashboard/{id}")
+    public String showAccountDashboard(@PathVariable(value = "id") int id, Model m) {
+        Account account = ar.findById(id).get();
+        List<AccountTransaction> transactions = atr.findAllByAccountIDOrTransactionPartyAccountIDOrderByTransactionIDDesc(account, account);
+        m.addAttribute("account", account);
+        m.addAttribute("transactions", transactions);
         return "accountdashboard";
     }
 
-    @GetMapping(value="/transact/{type}")
-    public String transact(@PathVariable(value = "type", required = true) String type, Model model) {
+    @GetMapping(value="/transact/{type}/{id}")
+    public String transact(@PathVariable(value = "type", required = true) String type, @PathVariable(value = "id", required = true) int id, Model model) {
+        model.addAttribute("account", ar.findById(id).get());
         model.addAttribute("type", type);
         return "transact";
     }
+
+    @PostMapping(value="/transact")
+    public String transacting(@RequestBody String entity) {
+        //TODO: process POST request
+        
+        return entity;
+    }
+    
 }
