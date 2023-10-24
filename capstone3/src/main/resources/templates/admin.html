@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Document</title>
+    <title>Admin</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
+
 <body>
     <div th:replace="~{fragments/navbar :: nav}"></div>
+
     <div class="container">
         <h1 class="mt-4">Teller Accounts</h1>
 
@@ -24,16 +27,55 @@
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <label for="first_name">First name:</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" required />
+                    <label for="firstName">First name:</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required />
                 </div>
                 <div class="form-group col-md-6">
-                    <label for="last_name">Last name:</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" required />
+                    <label for="lastName">Last name:</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required />
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Create</button>
         </form>
+        <br>
+
+        <!-- Edit Teller -->
+        <div id="editComponent" style="display: none;">
+            <h2>Edit Teller</h2>
+            <form th:action="@{/editTeller}" method="post">
+                <table class="table table-striped mt-4">
+                    <thead>
+                        <tr>
+                            <th>User ID</th>
+                            <th>User Name</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Creation Date</th>
+                            <th>Password</th>
+                            <th>Save</th>
+                            <th>Cancle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><input type="number" id="editUserID" name="editUserID" size="1" readonly style="background-color: lightgray;"></td>
+                            <td><input type="text" id="editUsername" name="editUsername" size="10" required /></td>
+                            <td><input type="text" id="editFirstName" name="editFirstName" size="10" required /></td>
+                            <td><input type="text" id="editLastName" name="editLastName" size="10" required /></td>
+                            <td><input type="text" id="editCreationDate" name="editCreationDate" size="8" readonly style="background-color: lightgray;" /></td>
+                            <td><input type="password" id="editPassword" name="editPassword" size="10" required /></td>
+                            <td><button type="submit" class="btn btn-success">Save</button></td>
+                            <td><button type="button" class="btn btn-secondary" onclick="cancelEdit()">Cancel</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+
+        <!-- Display the error message if it exists -->
+        <div th:if="${duplicateUsernameError}" class="alert alert-danger">
+            <p th:text="${duplicateUsernameError}"></p>
+        </div>
 
         <!-- Table for displaying tellers info-->
         <h2 class="mt-4">Current Teller Accounts</h2>
@@ -57,10 +99,13 @@
                     <td th:text="${teller.lastName}"></td>
                     <td th:text="${teller.creationDate}"></td>
                     <td>
-                        <form th:action="@{/editTeller}" method="post">
-                            <input type="hidden" name="userID" th:value="${teller.userID}" />
-                            <button type="submit" class="btn btn-info">Edit</button>
-                        </form>
+                        <button type="button" class="btn btn-info edit-button" 
+                        th:attr="data-userid=${teller.userID}, data-username=${teller.username},
+                        data-firstname=${teller.firstName}, data-lastname=${teller.lastName},
+                        data-creationdate=${teller.creationDate}"
+                            th:onclick="showEditComponent(this)">
+                            Edit
+                        </button>
                     </td>
                     <td>
                         <form th:action="@{/deleteTeller}" method="post">
@@ -72,8 +117,31 @@
             </tbody>
         </table>
     </div>
+    <script>
+        function showEditComponent(button) {
+            var userID = button.getAttribute('data-userid');
+            var username = button.getAttribute('data-username');
+            var firstName = button.getAttribute('data-firstname');
+            var lastName = button.getAttribute('data-lastname');
+            var creationDate = button.getAttribute('data-creationdate');
+            
+            // Set the values in the edit component
+            document.getElementById("editUserID").value = userID;
+            document.getElementById("editUsername").value = username;
+            document.getElementById("editFirstName").value = firstName;
+            document.getElementById("editLastName").value = lastName;
+            document.getElementById("editCreationDate").value = creationDate;
+            document.getElementById("editComponent").style.display = "block";
+        }
+
+        function cancelEdit() {
+            document.getElementById("editComponent").style.display = "none";
+        }
+    </script>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
+
 </html>
