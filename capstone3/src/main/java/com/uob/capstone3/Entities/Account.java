@@ -22,29 +22,29 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class Account {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountID;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     private String customerNRIC;
 
-    @Column(nullable = false) 
+    @Column(nullable = false)
     private String customerName;
 
-    @ManyToOne 
+    @ManyToOne
     @JoinColumn(name = "accountType_id", nullable = false)
     private AccountType accountType;
 
     @Column(nullable = false, columnDefinition = "DATE DEFAULT SYSDATE")
-    @Temporal(TemporalType.DATE) 
-    private LocalDate accountCreatedDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate accountCreatedDate = LocalDate.now();
 
     @Column(nullable = false, columnDefinition = "INT DEFAULT 1")
-    private int accountIsActive;
+    private int accountIsActive = 1;
 
-    @Column(nullable = false, columnDefinition = "NUMERIC(10, 2) DEFAULT 0.00") 
-    private Double accountBalance;
+    @Column(nullable = false, columnDefinition = "NUMERIC(10, 2) DEFAULT 0.00")
+    private Double accountBalance = 0.00;
 
 }
