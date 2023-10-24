@@ -10,7 +10,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Table(name = "AccountType")
 @AllArgsConstructor
@@ -21,6 +20,6 @@ public class AccountType {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int accountTypeID;
 
-     @Column(nullable = false) 
+    @Column(nullable = false)
     private String accountTypeName;
 }
