@@ -1,9 +1,12 @@
 package com.uob.capstone3.Controllers;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uob.capstone3.Entities.Account;
 import com.uob.capstone3.Entities.AccountType;
+import com.uob.capstone3.Entities.Person;
 import com.uob.capstone3.Repositories.AccountRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
+import com.uob.capstone3.Repositories.PersonRepository;
 
 @Controller
 public class AccountController {
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private AccountRepository ar;
@@ -26,16 +32,34 @@ public class AccountController {
     @Autowired
     AccountTypeRepository accountTypeRepository;
 
+    @Autowired
+    private PersonRepository personRepository;
+
+    @RequestMapping("/login")
+    public String showMain(Model model, Principal principal) {
+        List<Person> usersList = (List<Person>) personRepository.findAll();
+        System.out.println(principal.getName());
+        model.addAttribute("usersList", usersList);
+        model.addAttribute("username", principal.getName());
+        model.addAttribute("principal", principal);
+        return "redirect:/viewAccounts";
+    }
+
+    // @RequestMapping("/login")
+    // public String showLogin() {
+    // return "login";
+    // }
+
     @GetMapping("/viewAccounts")
-    public String showViewAccounts(Model model){
+    public String showViewAccounts(Model model) {
         List<Account> accounts = ar.findAll();
         model.addAttribute("accounts", accounts);
         return "viewAccounts";
     }
-    
+
     @GetMapping("/deactivateAccount/{accountID}")
-    public String deactivateAccount(Model model, @PathVariable int accountID){
-        Optional<Account> accountOptional = ar.findById(accountID);  
+    public String deactivateAccount(Model model, @PathVariable int accountID) {
+        Optional<Account> accountOptional = ar.findById(accountID);
         if (accountOptional.isPresent()) {
             Account acct = accountOptional.get();
             acct.setAccountIsActive(0);
@@ -45,8 +69,8 @@ public class AccountController {
     }
 
     @GetMapping("/activateAccount/{accountID}")
-    public String activateAccount(Model model, @PathVariable int accountID){
-        Optional<Account> accountOptional = ar.findById(accountID);  
+    public String activateAccount(Model model, @PathVariable int accountID) {
+        Optional<Account> accountOptional = ar.findById(accountID);
         if (accountOptional.isPresent()) {
             Account acct = accountOptional.get();
             acct.setAccountIsActive(1);
@@ -106,4 +130,3 @@ public class AccountController {
         }
     }
 }
-
