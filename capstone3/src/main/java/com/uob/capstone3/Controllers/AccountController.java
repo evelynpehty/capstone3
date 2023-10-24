@@ -15,13 +15,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.uob.capstone3.Entities.Account;
 import com.uob.capstone3.Entities.AccountType;
 import com.uob.capstone3.Repositories.AccountRepository;
+import com.uob.capstone3.Repositories.AccountTransactionRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
 
 @Controller
 public class AccountController {
-
     @Autowired
     private AccountRepository ar;
+
+    @Autowired
+    AccountTransactionRepository atr;
 
     @Autowired
     AccountTypeRepository accountTypeRepository;
@@ -32,7 +35,7 @@ public class AccountController {
         model.addAttribute("accounts", accounts);
         return "viewAccounts";
     }
-    
+
     @GetMapping("/deactivateAccount/{accountID}")
     public String deactivateAccount(Model model, @PathVariable int accountID){
         Optional<Account> accountOptional = ar.findById(accountID);  
@@ -105,5 +108,16 @@ public class AccountController {
             return "redirect:/viewAccounts";
         }
     }
-}
 
+    @GetMapping(value="/accountdashboard")
+    public String showAccountDashboard(Model m) {
+        m.addAttribute("transactions", atr.findAll());
+        return "accountdashboard";
+    }
+
+    @GetMapping(value="/transact/{type}")
+    public String transact(@PathVariable(value = "type", required = true) String type, Model model) {
+        model.addAttribute("type", type);
+        return "transact";
+    }
+}
