@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.uob.capstone3.Entities.Account;
+import com.uob.capstone3.Entities.AccountTransaction;
 import com.uob.capstone3.Entities.AccountType;
 import com.uob.capstone3.Repositories.AccountRepository;
 import com.uob.capstone3.Repositories.AccountTransactionRepository;
@@ -111,7 +112,10 @@ public class AccountController {
 
     @GetMapping(value="/accountdashboard")
     public String showAccountDashboard(Model m) {
-        m.addAttribute("transactions", atr.findAll());
+        Account account = ar.findById(2).get();
+        List<AccountTransaction> transactionList = atr.findAllByTransactionPartyAccountID(account);
+        transactionList.addAll(atr.findAllByAccountID(account));
+        m.addAttribute("transactions", transactionList);
         return "accountdashboard";
     }
 
