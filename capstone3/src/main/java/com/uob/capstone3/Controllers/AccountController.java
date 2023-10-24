@@ -18,7 +18,6 @@ import com.uob.capstone3.Entities.AccountType;
 import com.uob.capstone3.Repositories.AccountRepository;
 import com.uob.capstone3.Repositories.AccountTransactionRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class AccountController {
@@ -127,11 +126,27 @@ public class AccountController {
         return "transact";
     }
 
-    @PostMapping(value="/transact")
-    public String transacting(@RequestBody String entity) {
+    @PostMapping(value="/transact/{type}/{id}")
+    public String transacting(
+        @PathVariable(value = "type", required = true) String type,
+        @PathVariable(value = "id", required = true) int id,
+        @RequestParam(value = "payeeId", required = false) Integer payeeId,
+        @RequestParam(value = "amount", required = true) double amount,
+        @RequestParam(value = "description", required = false) String description
+    ) {
         //TODO: process POST request
+        switch (type) {
+            case "deposit":
+                
+                break;
+            case "withdraw":
+                break;
+            case "transfer":
+                break;
         
-        return entity;
+            default:
+                break;
+        }
+        return "";
     }
-    
 }
