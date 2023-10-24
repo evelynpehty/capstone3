@@ -35,20 +35,21 @@ public class AccountController {
     @Autowired
     private PersonRepository personRepository;
 
-    @RequestMapping("/login")
+    @RequestMapping("/")
     public String showMain(Model model, Principal principal) {
         List<Person> usersList = (List<Person>) personRepository.findAll();
         System.out.println(principal.getName());
         model.addAttribute("usersList", usersList);
         model.addAttribute("username", principal.getName());
         model.addAttribute("principal", principal);
+
         return "redirect:/viewAccounts";
     }
 
-    // @RequestMapping("/login")
-    // public String showLogin() {
-    // return "login";
-    // }
+    @RequestMapping("/login")
+    public String showLogin() {
+        return "login";
+    }
 
     @GetMapping("/viewAccounts")
     public String showViewAccounts(Model model) {
@@ -89,7 +90,8 @@ public class AccountController {
     }
 
     @PostMapping("/createAccount")
-    public String doCreateAccount(@RequestParam String customerNRIC, @RequestParam String customerName,
+    public String doCreateAccount(@RequestParam String customerNRIC,
+            @RequestParam String customerName,
             @RequestParam int accountTypeID, Model m) {
         Account account = new Account();
         List<Account> existingAccounts = ar.findByCustomerNRIC(customerNRIC);
