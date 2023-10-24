@@ -31,9 +31,10 @@ public class AccountController {
 
     @RequestMapping("/createAccount")
     public String showCreateAccount(Model model) {
-        List<AccountType> accountTypes = accountTypeRepository.findAll(); // Get account types from your
-                                                                          // service/repository
+        List<AccountType> accountTypes = accountTypeRepository.findAll();
+        List<Account> account = accountRepository.findAll();
         model.addAttribute("accountTypes", accountTypes);
+        model.addAttribute("account", account);
         return "createAccount";
     }
 
