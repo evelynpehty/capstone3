@@ -26,7 +26,8 @@ public class SecurityConfig {
                         .requestMatchers("/tellers").hasAuthority("Admin")
                         .requestMatchers("/createAccount", "/viewAccounts").hasAuthority("Teller")
                         .requestMatchers("/logout", "/login").permitAll()
-                        .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts", "/tellers")
+                        .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts",
+                                "/tellers")
                         .authenticated())
                 .formLogin(
                         fl -> fl
@@ -50,7 +51,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());

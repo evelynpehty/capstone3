@@ -24,13 +24,10 @@ public class PersonDetailService implements UserDetailsService {
             throw new UsernameNotFoundException("User not found");
         }
 
-        // Convert roles to lowercase for case-insensitive comparison
-        String lowercaseRole = person.getRole().toLowerCase();
-
         return User.builder()
                 .username(person.getUsername())
                 .password(person.getPassword())
-                .roles(lowercaseRole) // Use lowercase role name for case-insensitive comparison
+                .roles(person.getRole())
                 .build();
     }
 }
