@@ -1,6 +1,5 @@
 package com.uob.capstone3.Controllers;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -24,6 +23,7 @@ import com.uob.capstone3.Entities.AccountType;
 import com.uob.capstone3.Repositories.AccountRepository;
 import com.uob.capstone3.Repositories.AccountTransactionRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
+
 @Controller
 @RequestMapping("/Teller")
 public class AccountController {
