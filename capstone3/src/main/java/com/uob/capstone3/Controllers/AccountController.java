@@ -1,5 +1,6 @@
 package com.uob.capstone3.Controllers;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.uob.capstone3.Entities.Account;
 import com.uob.capstone3.Entities.AccountTransaction;
@@ -132,21 +134,78 @@ public class AccountController {
         @PathVariable(value = "id", required = true) int id,
         @RequestParam(value = "payeeId", required = false) Integer payeeId,
         @RequestParam(value = "amount", required = true) double amount,
-        @RequestParam(value = "description", required = false) String description
+        @RequestParam(value = "description", required = false) String description,
+        RedirectAttributes redirectAttributes
     ) {
         //TODO: process POST request
+        String message = null, messageType = null;
+        Account account = ar.findById(id).get();
+
+        AccountTransaction transaction = new AccountTransaction();
+        transaction.setAccountID(account);
+        transaction.setTransactionType(type.substring(0, 1).toUpperCase() + type.substring(1));
+        transaction.setTransactionDescription(description);
+        transaction.setTransactionAmount(amount);
+        transaction.setTransactionDate(LocalDate.now());
+
         switch (type) {
             case "deposit":
-                
+                account.setAccountBalance(account.getAccountBalance() + amount);
+                message = "Your deposit was successful.";
+                messageType = "success";
                 break;
+
             case "withdraw":
+                if (amount > account.getAccountBalance()) {
+                    redirectAttributes.addFlashAttribute("message", "Your withdrawal failed. You do not have sufficient fund.");
+                    redirectAttributes.addFlashAttribute("messageType", "error");
+                    return "redirect:/accountdashboard/" + id;
+                } else {
+                    account.setAccountBalance(account.getAccountBalance() - amount);
+                    message = "Your withdrawal was successful.";
+                    messageType = "success";
+                }
                 break;
+
             case "transfer":
+                Optional<Account> optionalPayee = ar.findById(payeeId);
+                if (optionalPayee.isEmpty()) {
+                    redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. The payee does not exist.");
+                    redirectAttributes.addFlashAttribute("messageType", "error");
+                    return "redirect:/accountdashboard/" + id;
+                } else {
+                    Account payee = optionalPayee.get();
+                    if (payee.getAccountIsActive() == 0) {
+                        redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. The payee's account is inactive.");
+                        redirectAttributes.addFlashAttribute("messageType", "error");
+                        return "redirect:/accountdashboard/" + id;
+                    } else {
+                        if (amount > account.getAccountBalance()) {
+                            redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. You do not have sufficient fund.");
+                            redirectAttributes.addFlashAttribute("messageType", "error");
+                            return "redirect:/accountdashboard/" + id;
+                        } else {
+                            account.setAccountBalance(account.getAccountBalance() - amount);
+                            payee.setAccountBalance(payee.getAccountBalance() + amount);
+                            transaction.setTransactionPartyAccountID(payee);
+
+                            message = "Your fund transfer was successful.";
+                            messageType = "success";
+                            ar.save(payee);
+                        }
+                    }
+                }
                 break;
         
             default:
                 break;
         }
-        return "";
+
+        ar.save(account);
+        atr.save(transaction);
+
+        redirectAttributes.addFlashAttribute("message", message);
+        redirectAttributes.addFlashAttribute("messageType", messageType);
+        return "redirect:/accountdashboard/" + id;
     }
 }
