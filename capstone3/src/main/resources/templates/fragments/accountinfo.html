@@ -9,8 +9,8 @@
                 <p class="col mt-3">Account Status: <span
                         th:text="*{accountIsActive} == 1 ? 'ACTIVE' : 'INACTIVE'"></span></p>
                 <div class="col d-flex align-items-center" th:switch="*{accountIsActive}">
-                    <button type="button" class="btn btn-danger btn-sm" th:case="1">Deactivate</button>
-                    <button type="button" class="btn btn-success btn-sm" th:case="0">Activate</button>
+                    <a th:href="'/Teller/toggleActive/' + *{accountID}" class="btn btn-danger btn-sm" th:case="1">Deactivate</a>
+                    <a th:href="'/Teller/toggleActive/' + *{accountID}" class="btn btn-success btn-sm" th:case="0">Activate</a>
                 </div>
             </div>
         </div>
@@ -22,11 +22,11 @@
     </div>
     <div class="row m-5" th:if="*{accountIsActive} == 1">
         <a class="col mx-5 d-flex justify-content-center btn btn-info"
-            th:href="'/transact/deposit/' + *{accountID}">Deposit</a>
+            th:href="'/Teller/transact/deposit/' + *{accountID}">Deposit</a>
         <a class="col mx-5 d-flex justify-content-center btn btn-info"
-            th:href="'/transact/withdraw/' + *{accountID}">Withdraw</a>
+            th:href="'/Teller/transact/withdraw/' + *{accountID}">Withdraw</a>
         <a class="col mx-5 d-flex justify-content-center btn btn-info"
-            th:href="'/transact/transfer/' + *{accountID}">Transfer</a>
+            th:href="'/Teller/transact/transfer/' + *{accountID}">Transfer</a>
     </div>
     <div th:if="*{accountIsActive} == 0">
         <p class="alert alert-warning text-center">Activate this account to access transactional features!</p>

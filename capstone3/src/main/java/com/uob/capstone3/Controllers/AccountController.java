@@ -22,6 +22,7 @@ import com.uob.capstone3.Repositories.AccountTransactionRepository;
 import com.uob.capstone3.Repositories.AccountTypeRepository;
 
 @Controller
+@RequestMapping("/Teller")
 public class AccountController {
     @Autowired
     private AccountRepository ar;
@@ -47,7 +48,7 @@ public class AccountController {
             acct.setAccountIsActive(0);
             ar.save(acct);
         }
-        return "redirect:/viewAccounts";
+        return "redirect:/Teller/viewAccounts";
     }
 
     @GetMapping("/activateAccount/{accountID}")
@@ -58,7 +59,7 @@ public class AccountController {
             acct.setAccountIsActive(1);
             ar.save(acct);
         }
-        return "redirect:/viewAccounts";
+        return "redirect:/Teller/viewAccounts";
     }
 
     @RequestMapping("/createAccount")
@@ -85,14 +86,14 @@ public class AccountController {
             ar.save(account);
             String alert = "Account created!";
             m.addAttribute("alert", alert);
-            return "redirect:/viewAccounts";
+            return "redirect:/Teller/viewAccounts";
         } else {
             for (Account accountRef : existingAccounts) {
                 if (accountRef.getAccountType().getAccountTypeName()
                         .equalsIgnoreCase(accountType.getAccountTypeName())) {
                     String alert = "Account already exists!";
                     m.addAttribute("alert", alert);
-                    return "redirect:/createAccount";
+                    return "redirect:/Teller/createAccount";
                 }
             }
             account.setAccountType(accountType);
@@ -108,7 +109,7 @@ public class AccountController {
             }
 
             ar.save(account);
-            return "redirect:/viewAccounts";
+            return "redirect:/Teller/viewAccounts";
         }
     }
 
@@ -159,7 +160,7 @@ public class AccountController {
                 if (amount > account.getAccountBalance()) {
                     redirectAttributes.addFlashAttribute("message", "Your withdrawal failed. You do not have sufficient fund.");
                     redirectAttributes.addFlashAttribute("messageType", "error");
-                    return "redirect:/accountdashboard/" + id;
+                    return "redirect:/Teller/accountdashboard/" + id;
                 } else {
                     account.setAccountBalance(account.getAccountBalance() - amount);
                     message = "Your withdrawal was successful.";
@@ -172,18 +173,18 @@ public class AccountController {
                 if (optionalPayee.isEmpty()) {
                     redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. The payee does not exist.");
                     redirectAttributes.addFlashAttribute("messageType", "error");
-                    return "redirect:/accountdashboard/" + id;
+                    return "redirect:/Teller/accountdashboard/" + id;
                 } else {
                     Account payee = optionalPayee.get();
                     if (payee.getAccountIsActive() == 0) {
                         redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. The payee's account is inactive.");
                         redirectAttributes.addFlashAttribute("messageType", "error");
-                        return "redirect:/accountdashboard/" + id;
+                        return "redirect:/Teller/accountdashboard/" + id;
                     } else {
                         if (amount > account.getAccountBalance()) {
                             redirectAttributes.addFlashAttribute("message", "Your fund transfer failed. You do not have sufficient fund.");
                             redirectAttributes.addFlashAttribute("messageType", "error");
-                            return "redirect:/accountdashboard/" + id;
+                            return "redirect:/Teller/accountdashboard/" + id;
                         } else {
                             account.setAccountBalance(account.getAccountBalance() - amount);
                             payee.setAccountBalance(payee.getAccountBalance() + amount);
@@ -206,6 +207,16 @@ public class AccountController {
 
         redirectAttributes.addFlashAttribute("message", message);
         redirectAttributes.addFlashAttribute("messageType", messageType);
-        return "redirect:/accountdashboard/" + id;
+        return "redirect:/Teller/accountdashboard/" + id;
+    }
+
+    @GetMapping(value="/toggleActive/{id}")
+    public String toggleActive(@PathVariable(value = "id", required = true) int id, RedirectAttributes redirectAttributes) {
+        Account account = ar.findById(id).get();
+        account.setAccountIsActive(1 - account.getAccountIsActive());
+        ar.save(account);
+
+        redirectAttributes.addFlashAttribute("message", "Your account has been " + (account.getAccountIsActive() == 1 ? "activated" : "deactivated") + " successfully.");
+        return "redirect:/Teller/accountdashboard/" + id;
     }
 }
