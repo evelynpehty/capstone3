@@ -22,7 +22,7 @@
                   </div>
                 <div class="card">
                     <div class="card-body">
-                        <form th:action="@{/doCreateAccount}" method="post" th:object="${account}">
+                        <form th:action="@{/Teller/doCreateAccount}" method="post" th:object="${account}">
                             <div class="mb-3">
                                 <label for="customerNRIC" class="form-label">NRIC: </label>
                                 <input type="text" class="form-control" name="customerNRIC" id="customerNRIC" th:field="*{customerNRIC}" required>

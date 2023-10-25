@@ -18,9 +18,9 @@ public class CustomAuthSuccessHandler extends SavedRequestAwareAuthenticationSuc
     protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
         // Your logic to determine the target URL based on the user's roles
         if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Admin"))) {
-            return "/tellers";
+            return "/Admin/viewTellers";
         } else if (authentication.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("Teller"))) {
-            return "/viewAccounts";
+            return "/Teller/viewAccounts";
         } else {
             return "/login";
         }

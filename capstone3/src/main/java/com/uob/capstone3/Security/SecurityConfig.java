@@ -29,10 +29,10 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/tellers").hasAuthority("Admin")
-                        .requestMatchers("/createAccount", "/viewAccounts").hasAuthority("Teller")
+                        .requestMatchers("/Admin/**").hasAuthority("Admin")
+                        .requestMatchers("/Teller/**").hasAuthority("Teller")
                         .requestMatchers("/logout", "/login", "/images/**").permitAll()
-                        .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts", "/tellers")
+                        .requestMatchers( "/login", "/Teller/**", "/Admin/**")
                         .authenticated())
                 .formLogin(
                         fl -> fl
