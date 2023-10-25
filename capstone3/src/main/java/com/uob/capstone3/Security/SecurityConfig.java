@@ -20,38 +20,34 @@ public class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/logout", "/login").permitAll()
-                        .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts", "/tellers")
-                        .authenticated())
-                .formLogin(
-                        fl -> fl
-                                .loginPage("/login").failureHandler(customAuthenticationFailureHandler())
-                                .defaultSuccessUrl("/viewAccounts")
-                                .permitAll())
-                .logout((logout) -> logout.logoutSuccessUrl("/login"))
-                .csrf(csrf -> csrf.disable());
-
-        return http.build();
-    }
-
-    @Bean
-    UserDetailsService userDetailsService() {
-        return new PersonDetailService();
-    }
-
-    @Bean
-    BCryptPasswordEncoder passwordEncoder() {
+    public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
+    public DaoAuthenticationProvider authenticationProvider(UserDetailsService userDetailsService) {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/logout", "/login", "/index", "/createAccount", "/viewAccounts")
+                        .hasAuthority("admin")
+                        .requestMatchers("/createAccount", "/viewAccounts").hasAuthority("teller")
+                        .anyRequest().authenticated())
+                .formLogin(login -> login
+                        .loginPage("/login").failureHandler(customAuthenticationFailureHandler())
+                        .permitAll())
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/login")
+                        .permitAll())
+                .csrf(csrf -> csrf.disable());
+        return http.build();
+    }
+
 }
