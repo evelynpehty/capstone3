@@ -11,18 +11,19 @@
     />
     <style>
       body {
-        background: linear-gradient(to bottom right, #01337b, #4a90e2);
+        background: linear-gradient(to bottom right, #f3463a, #d9d9d9);
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         margin: 0;
-        color: #ffffff;
+        color: #d9d9d9;
       }
 
       .custom-card {
-        border: 1px solid #ffffff; /* White Border */
-        background: linear-gradient(to bottom right, #01337b, #4a90e2);
+        border: 1px solid #0cb9c5;
+        background: linear-gradient(to bottom right, #d9d9d9, #f3463a);
+        align-items: center;
         padding: 60px; /* Increased padding */
         margin-top: 50px; /* Increased top margin */
       }
@@ -34,6 +35,30 @@
       .login-btn {
         margin-top: 20px; /* Increased margin between button and input fields */
       }
+      .image-container {
+        text-align: center;
+      }
+
+      .button-container {
+        text-align: center;
+      }
+
+      /* Default button styles */
+      .btn-primary {
+        background-color: transparent;
+        color: #d9d9d9;
+        border: 2px solid #d9d9d9;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+
+      /* Change button color on hover */
+      .btn:hover {
+        border-color: #0cb9c5;
+        background-color: #d9d9d9;
+        color: #0cb9c5;
+      }
     </style>
     <title>Login Page</title>
   </head>
@@ -43,9 +68,10 @@
         <div class="col-md-6">
           <div class="card mt-5 custom-card">
             <div class="card-body">
-              <h2 class="card-title text-center">
-                Welcome to BlueHarbour Bank
-              </h2>
+              <div class="image-container">
+                <img src="/images/Logo.png" alt="harbourback" width="300" />
+              </div>
+              <br />
               <!-- Check if there is an error message in the session -->
               <div
                 th:if="${param.error != null and session.error != null}"
@@ -74,7 +100,9 @@
                     required
                   />
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <div class="button-container">
+                  <button type="submit" class="btn btn-primary">Login</button>
+                </div>
               </form>
             </div>
           </div>
