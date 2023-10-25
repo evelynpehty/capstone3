@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -17,6 +18,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationFailureHandler customAuthenticationFailureHandler() {
         return new CustomAuthFailureHandler();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthSuccessHandler();
     }
 
     @Bean
@@ -31,7 +37,7 @@ public class SecurityConfig {
                 .formLogin(
                         fl -> fl
                                 .loginPage("/login").failureHandler(customAuthenticationFailureHandler())
-                                .defaultSuccessUrl("/viewAccounts")
+                                .successHandler(customAuthenticationSuccessHandler())
                                 .permitAll())
                 .logout((logout) -> logout.logoutSuccessUrl("/login"))
                 .csrf(csrf -> csrf.disable());
