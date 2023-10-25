@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-Capstone3Application<capstone3>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.uob.capstone3.Capstone3Application",
+      "projectName": "capstone3",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}

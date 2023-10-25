@@ -1,50 +1,87 @@
 package com.uob.capstone3.Controllers;
 
 import java.time.LocalDate;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import com.uob.capstone3.Entities.Person;
 import com.uob.capstone3.Repositories.PersonRepository;
 
 @Controller
+@RequestMapping("/Admin")
 public class PersonController {
+
+    PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
     @Autowired
     PersonRepository personRepository;
 
-    @GetMapping("/tellers")
+    @GetMapping("/viewTellers")
     public String listTellers(Model model) {
         model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
         return "admin";
     }
 
-    @PostMapping("/addTeller")
+    @GetMapping("/addTeller")
+    public String showAddTeller(Model model) {
+        model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
+        return "addTeller";
+    }
+
+    @PostMapping("/doAddTeller")
     public String addTeller(
             @RequestParam("username") String username,
-            @RequestParam("first_name") String first_name,
-            @RequestParam("last_name") String last_name,
-            @RequestParam("password") String password) {
-        Person teller = new Person();
-        teller.setFirstName(first_name);
-        teller.setLastName(last_name);
-        teller.setPassword(password);
-        teller.setRole("Teller");
-        teller.setUsername(username);
-        teller.setCreationDate(LocalDate.now());
-        personRepository.save(teller);
-        return "redirect:/tellers";
+            @RequestParam("firstName") String firstName,
+            @RequestParam("lastName") String lastName,
+            @RequestParam("password") String password,
+            Model model) {
+        try {
+            Person teller = new Person();
+            teller.setFirstName(firstName);
+            teller.setLastName(lastName);
+            teller.setPassword(passwordEncoder.encode(password));
+            teller.setRole("Teller");
+            teller.setUsername(username);
+            teller.setCreationDate(LocalDate.now());
+            personRepository.save(teller);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
+            model.addAttribute("duplicateUsernameError",
+                    "Username is already in use. Please choose a different username.");
+            return "addTeller";
+        }
+        return "redirect:/Admin/viewTellers";
     }
 
     @PostMapping("/deleteTeller")
     public String deleteTeller(@RequestParam Integer userID) {
         personRepository.deleteByUserID(userID);
-        return "redirect:/tellers";
+        return "redirect:/Admin/viewTellers";
     }
 
+    @PostMapping("/editTeller")
+    public String editTeller(
+            @RequestParam("editUserID") int userID,
+            @RequestParam("editUsername") String username,
+            @RequestParam("editFirstName") String firstName,
+            @RequestParam("editLastName") String lastName,
+            @RequestParam("editPassword") String password,
+            Model model) {
+        try {
+            personRepository.updateUser(username, firstName, lastName, passwordEncoder.encode(password), userID);
+        } catch (DataIntegrityViolationException e) {
+            model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
+            model.addAttribute("duplicateUsernameError",
+                    "Username is already in use. Please choose a different username.");
+            return "admin";
+        }
+        return "redirect:/Admin/viewTellers";
+    }
 }

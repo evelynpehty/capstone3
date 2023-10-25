@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
@@ -13,25 +13,30 @@
     <div th:replace="~{fragments/navbar :: nav}"></div>
 
     <div class="container">
+        <!-- Add this code at the top of your "createAccount.html" template -->
         <div class="row justify-content-center d-flex align-items-center" style="min-height: 100vh">
             <div class="col-md-6">
+                <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <p th:text="${errorMessage}"></p>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                  </div>
                 <div class="card">
                     <div class="card-body">
-                        <form th:action="@{/createAccount}" method="post">
+                        <form th:action="@{/Teller/doCreateAccount}" method="post" th:object="${account}">
                             <div class="mb-3">
                                 <label for="customerNRIC" class="form-label">NRIC: </label>
-                                <input type="text" class="form-control" name="customerNRIC" id="customerNRIC" required>
+                                <input type="text" class="form-control" name="customerNRIC" id="customerNRIC" th:field="*{customerNRIC}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="customerName" class="form-label">Customer Name: </label>
-                                <input type="text" class="form-control" name="customerName" id="customerName" required>
+                                <input type="text" class="form-control" name="customerName" id="customerName" th:field="*{customerName}" required>
                             </div>
                             <div class="mb-3">
                                 <label for="accountTypeName" class="form-label">Account Type: </label>
-                                <select class="form-select" name="accountTypeID" id="accountTypeName" required>
+                                <select class="form-select" th:field="*{accountType}" id="accountTypeName" required>
                                     <option value="" disabled selected>Select Account Type</option>
                                     <option th:each="accountType : ${accountTypes}" th:value="${accountType.accountTypeID}"
-                                        th:text="${accountType.accountTypeName}"></option>
+                                            th:text="${accountType.accountTypeName}"></option>
                                 </select>
                             </div>
                             <button type="submit" class="btn btn-primary mt-3">Create Account</button>
@@ -41,6 +46,8 @@
             </div>
         </div>
     </div>
+    
+
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
