@@ -25,7 +25,7 @@
         <li class="nav-item">
           <a class="nav-link" href="/createAccount">Create Account</a>
         </li>
-        <li sec:authorize="hasAnyAuthority('Admin')" class="nav-item">
+        <li sec:authorize="hasAuthority('Admin')" class="nav-item">
           <a class="nav-link" href="/tellers">Manage Tellers</a>
         </li>
       </ul>

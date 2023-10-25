@@ -23,6 +23,8 @@ public class SecurityConfig {
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/tellers").hasAuthority("Admin")
+                        .requestMatchers("/createAccount", "/viewAccounts").hasAuthority("Teller")
                         .requestMatchers("/logout", "/login").permitAll()
                         .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts", "/tellers")
                         .authenticated())
