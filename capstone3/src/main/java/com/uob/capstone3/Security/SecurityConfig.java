@@ -21,11 +21,18 @@ public class SecurityConfig {
 
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
+        String[] staticresources = {
+                "/css/**",
+                "/images/**",
+                "/fonts/**",
+                "/scripts/**",
+        };
         http
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/tellers").hasAuthority("Admin")
                         .requestMatchers("/createAccount", "/viewAccounts").hasAuthority("Teller")
                         .requestMatchers("/logout", "/login").permitAll()
+                        .requestMatchers(staticresources).permitAll()
                         .requestMatchers("/", "/login", "/index", "/admin", "/createAccount", "/viewAccounts",
                                 "/tellers")
                         .authenticated())

@@ -11,18 +11,23 @@
     />
     <style>
       body {
-        background: linear-gradient(to bottom right, #ffffff, #4a90e2);
+        background: linear-gradient(to bottom right, #e13225ce, #d9d9d9);
         min-height: 100vh;
         display: flex;
         justify-content: center;
         align-items: center;
         margin: 0;
-        color: #ffffff;
+        color: #d9d9d9;
       }
 
       .custom-card {
-        border: 1px solid #ffffff; /* White Border */
-        background: linear-gradient(to bottom right, #01337b, #4a90e2);
+        border: 1px solid #f3463a;
+        background: linear-gradient(
+          to bottom right,
+          #d9d9d9,
+          #f3463a8e,
+          #d9d9d9
+        );
         padding: 60px; /* Increased padding */
         margin-top: 50px; /* Increased top margin */
       }
@@ -43,10 +48,10 @@
         <div class="col-md-6">
           <div class="card mt-5 custom-card">
             <div class="card-body">
+              <img src="/Logo.png" alt="HarbourBack Bank" />
               <h2 class="card-title text-center">
-                Welcome to HarbourBack Bank
+                Welcome to HarbourBack UnionBank
               </h2>
-              <!-- Check if there is an error message in the session -->
               <div
                 th:if="${param.error != null and session.error != null}"
                 class="alert alert-danger"
