@@ -9,32 +9,35 @@
       integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
       crossorigin="anonymous"
     />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap"
+      rel="stylesheet"
+    />
     <style>
       body {
-        background: linear-gradient(to bottom right, #f3463a, #d9d9d9);
-        min-height: 100vh;
-        display: flex;
-        justify-content: center;
-        align-items: center;
         margin: 0;
-        color: #d9d9d9;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+          "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        text-align: left;
+        background-color: #fff;
+        background-image: url("/images/bg.jpg");
+        background-repeat: no-repeat;
+        background-size: cover;
       }
 
       .custom-card {
-        border: 1px solid #0cb9c5;
-        background: linear-gradient(to bottom right, #d9d9d9, #f3463a);
+        border: transparent;
+        background: transparent;
         align-items: center;
-        padding: 60px; /* Increased padding */
-        margin-top: 50px; /* Increased top margin */
+        padding-top: 10px;
       }
 
-      .input-group {
-        margin-bottom: 20px; /* Increased margin between input fields */
-      }
-
-      .login-btn {
-        margin-top: 20px; /* Increased margin between button and input fields */
-      }
       .image-container {
         text-align: center;
       }
@@ -43,21 +46,49 @@
         text-align: center;
       }
 
-      /* Default button styles */
       .btn-primary {
-        background-color: transparent;
-        color: #d9d9d9;
-        border: 2px solid #d9d9d9;
-        padding: 10px 20px;
-        cursor: pointer;
+        border: transparent;
+        background-color: #f28774;
+        color: #ffffff;
+        border-radius: 5px;
+        padding: 12px 24px;
+        font-size: 16px;
+        font-weight: bold;
         transition: background-color 0.3s ease;
+        width: 60%;
       }
 
-      /* Change button color on hover */
-      .btn:hover {
+      .btn-primary:hover {
+        background-color: #d95135;
+        border: #d95135;
+
+      }
+
+      .input-group {
+        margin-bottom: 20px; /* Increased margin between input fields */
+        display: flex;
+        flex-direction: column;
+      }
+
+      .input-group input {
+        height: 50px;
+        border-radius: 5px;
+        padding: 10px;
+        font-size: 16px;
+        border: 2px solid #d9d9d9;
+      }
+
+      .input-group input:focus {
         border-color: #0cb9c5;
-        background-color: #d9d9d9;
-        color: #0cb9c5;
+      }
+
+      .input-group label {
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      .form-control {
+        text-align: center;
       }
     </style>
     <title>Login Page</title>
@@ -71,14 +102,9 @@
               <div class="image-container">
                 <img src="/images/Logo.png" alt="harbourback" width="300" />
               </div>
+
               <br />
-              <!-- Check if there is an error message in the session -->
-              <div
-                th:if="${param.error != null and session.error != null}"
-                class="alert alert-danger"
-              >
-                <p th:text="${session.error}"></p>
-              </div>
+
               <form th:action="@{/login}" method="post">
                 <div class="mb-3">
                   <input
@@ -90,6 +116,7 @@
                     required
                   />
                 </div>
+
                 <div class="mb-3">
                   <input
                     type="password"
@@ -100,9 +127,11 @@
                     required
                   />
                 </div>
+
                 <div class="button-container">
                   <button type="submit" class="btn btn-primary">Login</button>
                 </div>
+	            </div>
               </form>
             </div>
           </div>
