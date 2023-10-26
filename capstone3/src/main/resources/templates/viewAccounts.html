@@ -38,7 +38,7 @@
                     <td th:text="${account.accountID}"></td>
                     <td th:text="${account.accountType.accountTypeName}"></td>
                     <td th:text="${account.accountIsActive == 1 ? 'Yes' : 'No'}"></td>
-                    <td th:text="${account.accountBalance}"></td>
+                    <td th:text="${#numbers.formatCurrency(account.accountBalance)}"></td>
                     <td>                        
                         <a th:href="@{'/Teller/accountdashboard/' + ${account.accountID}}" class="btn btn-primary btn-sm"><i class="bi bi-eye-fill"></i> View</a>
                         <a href="#"

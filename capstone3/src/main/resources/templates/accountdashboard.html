@@ -48,10 +48,12 @@
                     <td th:text="${transaction.transactionDate}"></td>
                     <td th:text="${transaction.transactionDescription}"></td>
                     <td th:text="${transaction.transactionType}"></td>
-                    <td th:text="${transaction.transactionAmount}"></td>
-                    <td
-                        th:text="${#strings.equals(transaction.transactionType, 'Transfer') ? (account.accountID == transaction.accountID.accountID ? transaction.transactionPartyAccountID.accountID : transaction.accountID.accountID) : null}">
-                    </td>
+                    <div th:switch="${transaction.transactionType}">
+                        <td class="text-success" th:case="'Deposit'" th:text="'+' + ${#numbers.formatCurrency(transaction.transactionAmount)}"></td>
+                        <td class="text-danger" th:case="'Withdraw'" th:text="'-' + ${#numbers.formatCurrency(transaction.transactionAmount)}"></td>
+                        <td th:class="${transaction.accountID.accountID == account.accountID ? 'text-danger' : 'text-success'}" th:case="'Transfer'" th:text="${(transaction.accountID.accountID == account.accountID ? '-' : '+') + #numbers.formatCurrency(transaction.transactionAmount)}"></td>
+                    </div>
+                    <td th:text="${#strings.equals(transaction.transactionType, 'Transfer') ? (account.accountID == transaction.accountID.accountID ? transaction.transactionPartyAccountID.accountID : transaction.accountID.accountID) : null}"></td>
                 </tr>
                 <tr>
             </tbody>
