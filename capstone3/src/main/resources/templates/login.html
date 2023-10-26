@@ -102,9 +102,13 @@
               <div class="image-container">
                 <img src="/images/Logo.png" alt="harbourback" width="300" />
               </div>
-
               <br />
-
+              <div
+              th:if="${param.error != null and session.error != null}"
+              class="alert alert-danger"
+            >
+              <p th:text="${session.error}"></p>
+            </div>
               <form th:action="@{/login}" method="post">
                 <div class="mb-3">
                   <input
