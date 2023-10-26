@@ -17,16 +17,16 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li  sec:authorize="hasAuthority('Teller')"  class="nav-item">
-          <a class="nav-link" href="/Teller/viewAccounts">View Accounts</a>
+          <a class="nav-link" th:classappend="${#strings.equals(page, 'viewAccounts') ? 'active' : ''}" href="/Teller/viewAccounts">View Accounts</a>
         </li>
         <li sec:authorize="hasAuthority('Teller')"  class="nav-item">
-          <a class="nav-link" href="/Teller/createAccount">Create Account</a>
+          <a class="nav-link" th:classappend="${#strings.equals(page, 'createAccount') ? 'active' : ''}" href="/Teller/createAccount">Create Account</a>
         </li>
         <li sec:authorize="hasAuthority('Admin')" class="nav-item">
-          <a class="nav-link" href="/Admin/viewTellers">View Tellers</a>
+          <a class="nav-link" th:classappend="${#strings.equals(page, 'viewTellers') ? 'active' : ''}" href="/Admin/viewTellers">View Tellers</a>
         </li>
         <li sec:authorize="hasAuthority('Admin')" class="nav-item">
-          <a class="nav-link" href="/Admin/addTeller">Add Teller</a>
+          <a class="nav-link" th:classappend="${#strings.equals(page, 'addTeller') ? 'active' : ''}" href="/Admin/addTeller">Add Teller</a>
         </li>
       </ul>
       <form class="d-flex">
