@@ -21,11 +21,11 @@
         </div>
     </div>
     <div class="row m-5" th:if="*{accountIsActive} == 1">
-        <a class="col mx-5 d-flex justify-content-center btn btn-info"
+        <a class="col mx-5 d-flex justify-content-center btn" th:classappend="${#strings.isEmpty(type) ? 'btn-info' : (#strings.equals(type, 'deposit') ? 'btn-dark' : 'btn-light')}"
             th:href="'/Teller/transact/deposit/' + *{accountID}">Deposit</a>
-        <a class="col mx-5 d-flex justify-content-center btn btn-info"
+        <a class="col mx-5 d-flex justify-content-center btn" th:classappend="${#strings.isEmpty(type) ? 'btn-info' : (#strings.equals(type, 'withdraw') ? 'btn-dark' : 'btn-light')}"
             th:href="'/Teller/transact/withdraw/' + *{accountID}">Withdraw</a>
-        <a class="col mx-5 d-flex justify-content-center btn btn-info"
+        <a class="col mx-5 d-flex justify-content-center btn" th:classappend="${#strings.isEmpty(type) ? 'btn-info' : (#strings.equals(type, 'transfer') ? 'btn-dark' : 'btn-light')}"
             th:href="'/Teller/transact/transfer/' + *{accountID}">Transfer</a>
     </div>
     <div th:if="*{accountIsActive} == 0">

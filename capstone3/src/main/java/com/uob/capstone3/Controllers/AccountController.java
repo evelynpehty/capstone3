@@ -42,6 +42,7 @@ public class AccountController {
     public String showViewAccounts(Model model) {
         List<Account> accounts = ar.findAll();
         model.addAttribute("accounts", accounts);
+        model.addAttribute("page", "viewAccounts");
         return "viewAccounts";
     }
 
@@ -73,6 +74,7 @@ public class AccountController {
         // List<Account> account = ar.findAll();
         model.addAttribute("accountTypes", accountTypes);
         model.addAttribute("account", new Account());
+        model.addAttribute("page", "createAccount");
         return "createAccount";
     }
 
@@ -84,6 +86,7 @@ public class AccountController {
             m.addAttribute("errorMessage", "An account with the same account type and NRIC already exists.");
             List<AccountType> accountTypes = accountTypeRepository.findAll();
             m.addAttribute("accountTypes", accountTypes);
+            m.addAttribute("page", "createAccount");
             return "createAccount";
         } else {
             ar.save(account);
