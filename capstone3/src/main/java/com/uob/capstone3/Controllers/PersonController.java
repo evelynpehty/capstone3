@@ -26,12 +26,14 @@ public class PersonController {
     @GetMapping("/viewTellers")
     public String listTellers(Model model) {
         model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
+        model.addAttribute("page", "viewTellers");
         return "admin";
     }
 
     @GetMapping("/addTeller")
     public String showAddTeller(Model model) {
         model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
+        model.addAttribute("page", "addTeller");
         return "addTeller";
     }
 
@@ -55,6 +57,7 @@ public class PersonController {
             model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
             model.addAttribute("duplicateUsernameError",
                     "Username is already in use. Please choose a different username.");
+            model.addAttribute("page", "addTeller");
             return "addTeller";
         }
         return "redirect:/Admin/viewTellers";
@@ -80,6 +83,7 @@ public class PersonController {
             model.addAttribute("tellers", personRepository.findByRoleIgnoreCase("Teller"));
             model.addAttribute("duplicateUsernameError",
                     "Username is already in use. Please choose a different username.");
+            model.addAttribute("page", "viewTellers");
             return "admin";
         }
         return "redirect:/Admin/viewTellers";
